@@ -1,20 +1,4 @@
-trigger:
-- master
-
-pool:
-  vmImage: ubuntu-latest
-
-variables:
-  azureSubscription: 'ME-MngEnvMCAP482325-v-ansonse-1 (ffb8fed6-6921-49f0-8eb8-2e00a9000d9a)'
-  appName: 'Java-webapp'
-  packagePath: '$(System.DefaultWorkingDirectory)/**/*.war'
-
-steps:
-# Checkout source
-- checkout: self
-
-# Build .war using Maven
-# Build .war
+# Build WAR
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
@@ -22,14 +6,18 @@ steps:
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
 
-# Copy WAR to artifact staging
+# Copy WAR to staging directory
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(System.DefaultWorkingDirectory)'
     Contents: '**/target/*.war'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-# Deploy to Azure Web App
+# Confirm WAR is in staging
+- script: ls -R $(Build.ArtifactStagingDirectory)
+  displayName: 'List staging directory contents'
+
+# Deploy WAR from staging
 - task: AzureWebApp@1
   inputs:
     azureSubscription: $(azureSubscription)
