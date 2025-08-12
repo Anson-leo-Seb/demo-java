@@ -24,23 +24,18 @@ steps:
 # Copy WAR to staging directory
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)'
-    Contents: '**/target/*.war'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    SourceFolder: '$(Build.ArtifactStagingDirectory)'
+    Contents: '**/*.war'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/renamed'
 
-# Publish WAR as downloadable build artifact
-- task: PublishBuildArtifacts@1
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'war-package'
-    publishLocation: 'Container'
+- powershell: |
+    $war = Get-ChildItem "$(Build.ArtifactStagingDirectory)/renamed" -Filter *.war | Select-Object -First 1
+    Rename-Item $war.FullName ROOT.war
+  displayName: 'Rename WAR to ROOT.war'
 
-# Deploy WAR to Azure Web App
-# Deploy WAR to Azure Web App
 - task: AzureWebApp@1
   inputs:
+    appType: webAppLinux
     azureSubscription: $(azureSubscription)
     appName: $(appName)
-    package: '$(Build.ArtifactStagingDirectory)/*.war'
-    appType: webAppLinux
-
+    package: '$(Build.ArtifactStagingDirectory)/renamed/ROOT.war'
