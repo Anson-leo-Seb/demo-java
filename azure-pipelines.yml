@@ -14,25 +14,25 @@ steps:
 - checkout: self
 
 # Build .war using Maven
+# Build .war
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'package'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
 
+# Copy WAR to artifact staging
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(System.DefaultWorkingDirectory)'
     Contents: '**/target/*.war'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
+# Deploy to Azure Web App
 - task: AzureWebApp@1
   inputs:
     azureSubscription: $(azureSubscription)
     appName: $(appName)
     package: '$(Build.ArtifactStagingDirectory)/*.war'
     appType: webAppLinux
-
