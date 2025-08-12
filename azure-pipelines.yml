@@ -36,9 +36,11 @@ steps:
     publishLocation: 'Container'
 
 # Deploy WAR to Azure Web App
+# Deploy WAR to Azure Web App
 - task: AzureWebApp@1
   inputs:
     azureSubscription: $(azureSubscription)
     appName: $(appName)
-    package: '$(Build.ArtifactStagingDirectory)/target/*.war'
+    package: '$(Build.ArtifactStagingDirectory)/*.war'
     appType: webAppLinux
+
