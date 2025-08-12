@@ -22,6 +22,10 @@ steps:
     jdkVersionOption: '1.11'
 
 # Copy WAR to staging directory
+- script: |
+    echo "Listing contents of Artifact Staging Directory"
+    ls -R "$(Build.ArtifactStagingDirectory)"
+  displayName: "Debug WAR location"
 
 - powershell: |
     $war = Get-ChildItem "$(Build.ArtifactStagingDirectory)/" -Filter *.war | Select-Object -First 1
