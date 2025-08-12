@@ -36,6 +36,6 @@ steps:
   inputs:
     azureSubscription: $(azureSubscription)
     appName: $(appName)
-    package: '$(Build.ArtifactStagingDirectory)/*.war'
+    package: '$(Build.ArtifactStagingDirectory)/target/*.war'
     appType: webAppLinux
 
