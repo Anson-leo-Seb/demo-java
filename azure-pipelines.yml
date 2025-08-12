@@ -23,8 +23,8 @@ steps:
 # Copy WAR to staging directory
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)'
-    Contents: '**/target/*.war'
+    SourceFolder: '$(System.DefaultWorkingDirectory)/target/'
+    Contents: '**/*.war'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 # Copy WAR to staging directory
 - script: |
@@ -42,4 +42,4 @@ steps:
     appType: webAppLinux
     azureSubscription: $(azureSubscription)
     appName: $(appName)
-    package: '$(Build.ArtifactStagingDirectory)/renamed/ROOT.war'
+    package: '$(Build.ArtifactStagingDirectory)/ROOT.war'
