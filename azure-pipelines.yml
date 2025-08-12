@@ -20,7 +20,12 @@ steps:
     goals: 'package'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
-
+# Copy WAR to staging directory
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    Contents: '**/target/*.war'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
 # Copy WAR to staging directory
 - script: |
     echo "Listing contents of Artifact Staging Directory"
