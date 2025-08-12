@@ -25,7 +25,7 @@ steps:
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(System.DefaultWorkingDirectory)'
-    Contents: '**/*.war'
+    Contents: '**/target/*.war'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
 # Publish WAR as downloadable build artifact
@@ -40,5 +40,5 @@ steps:
   inputs:
     azureSubscription: $(azureSubscription)
     appName: $(appName)
-    package: '$(Build.ArtifactStagingDirectory)/*.war'
+    package: '$(Build.ArtifactStagingDirectory)/target/*.war'
     appType: webAppLinux
