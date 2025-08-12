@@ -24,7 +24,7 @@ steps:
 # Copy WAR to staging directory
 - task: CopyFiles@2
   inputs:
-    SourceFolder: '$(Build.ArtifactStagingDirectory)/target'
+    SourceFolder: '$(Build.ArtifactStagingDirectory)'
     Contents: '**/*.war'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/renamed'
 
