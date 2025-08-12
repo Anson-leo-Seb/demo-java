@@ -23,11 +23,16 @@ steps:
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
 
-# Publish WAR to Azure Web App
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(System.DefaultWorkingDirectory)'
+    Contents: '**/target/*.war'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
 - task: AzureWebApp@1
   inputs:
     azureSubscription: $(azureSubscription)
     appName: $(appName)
-    package: $(packagePath)
-    appType: webAppLinux   # or 'webApp' for Windows
+    package: '$(Build.ArtifactStagingDirectory)/*.war'
+    appType: webAppLinux
 
