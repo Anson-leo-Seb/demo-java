@@ -13,6 +13,7 @@ steps:
 # Checkout source
 - checkout: self
 
+# Build WAR
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
@@ -27,15 +28,17 @@ steps:
     Contents: '**/target/*.war'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
 
-# Confirm WAR is in staging
-- script: ls -R $(Build.ArtifactStagingDirectory)
-  displayName: 'List staging directory contents'
+# Publish WAR as downloadable build artifact
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'war-package'
+    publishLocation: 'Container'
 
-# Deploy WAR from staging
+# Deploy WAR to Azure Web App
 - task: AzureWebApp@1
   inputs:
     azureSubscription: $(azureSubscription)
     appName: $(appName)
-    package: '$(Build.ArtifactStagingDirectory)/target/*.war'
+    package: '$(Build.ArtifactStagingDirectory)/*.war'
     appType: webAppLinux
-
