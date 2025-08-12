@@ -1,3 +1,20 @@
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  azureSubscription: 'ME-MngEnvMCAP482325-v-ansonse-1 (ffb8fed6-6921-49f0-8eb8-2e00a9000d9a)'
+  appName: 'Java-webapp'
+  packagePath: '$(System.DefaultWorkingDirectory)/**/*.war'
+
+steps:
+# Checkout source
+- checkout: self
+
+# Build .war using Maven
+# Build .war
 # Build WAR
 - task: Maven@3
   inputs:
@@ -24,3 +41,4 @@
     appName: $(appName)
     package: '$(Build.ArtifactStagingDirectory)/*.war'
     appType: webAppLinux
+
