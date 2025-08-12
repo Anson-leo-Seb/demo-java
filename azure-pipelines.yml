@@ -22,14 +22,9 @@ steps:
     jdkVersionOption: '1.11'
 
 # Copy WAR to staging directory
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '$(Build.ArtifactStagingDirectory)'
-    Contents: '**/*.war'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/renamed'
 
 - powershell: |
-    $war = Get-ChildItem "$(Build.ArtifactStagingDirectory)/renamed" -Filter *.war | Select-Object -First 1
+    $war = Get-ChildItem "$(Build.ArtifactStagingDirectory)" -Filter *.war | Select-Object -First 1
     Rename-Item $war.FullName ROOT.war
   displayName: 'Rename WAR to ROOT.war'
 
