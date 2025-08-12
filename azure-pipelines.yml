@@ -13,9 +13,6 @@ steps:
 # Checkout source
 - checkout: self
 
-# Build .war using Maven
-# Build .war
-# Build WAR
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
