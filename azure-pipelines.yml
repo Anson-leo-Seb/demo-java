@@ -24,7 +24,7 @@ steps:
 # Copy WAR to staging directory
 
 - powershell: |
-    $war = Get-ChildItem "$(Build.ArtifactStagingDirectory)" -Filter *.war | Select-Object -First 1
+    $war = Get-ChildItem "$(Build.ArtifactStagingDirectory)/" -Filter *.war | Select-Object -First 1
     Rename-Item $war.FullName ROOT.war
   displayName: 'Rename WAR to ROOT.war'
 
