@@ -20,26 +20,37 @@ steps:
     goals: 'package'
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
+
 # Copy WAR to staging directory
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(System.DefaultWorkingDirectory)/target/'
     Contents: '**/*.war'
     TargetFolder: '$(Build.ArtifactStagingDirectory)'
-# Copy WAR to staging directory
+
+# Debug WAR location
 - script: |
     echo "Listing contents of Artifact Staging Directory"
     ls -R "$(Build.ArtifactStagingDirectory)"
   displayName: "Debug WAR location"
 
+# Rename WAR to ROOT.war
 - powershell: |
     $war = Get-ChildItem "$(Build.ArtifactStagingDirectory)/" -Filter *.war | Select-Object -First 1
     Rename-Item $war.FullName ROOT.war
   displayName: 'Rename WAR to ROOT.war'
 
-- task: AzureWebApp@1
+# Azure CLI deployment (no clean)
+- task: AzureCLI@2
   inputs:
-    appType: webAppLinux
     azureSubscription: $(azureSubscription)
-    appName: $(appName)
-    package: '$(Build.ArtifactStagingDirectory)/ROOT.war'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      echo "Deploying WAR without cleaning existing files..."
+      az webapp deploy \
+        --resource-group <YourResourceGroupName> \
+        --name $(appName) \
+        --src-path "$(Build.ArtifactStagingDirectory)/ROOT.war" \
+        --type war \
+        --clean false
