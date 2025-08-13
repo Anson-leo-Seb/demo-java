@@ -40,18 +40,25 @@ steps:
     Rename-Item $war.FullName ROOT.war
   displayName: 'Rename WAR to ROOT.war'
 
-# Azure CLI deployment (no clean)
-- task: AzureCLI@2
+- task: AzureWebApp@1
   inputs:
+    appType: webAppLinux
     azureSubscription: $(azureSubscription)
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      echo "Deploying WAR without cleaning existing files..."
-      az webapp deploy \
-        --resource-group java-webapp_group \
-        --name $(appName) \
-        --src-path "$(Build.ArtifactStagingDirectory)/ROOT.war" \
-        --type war \
-        --target-path "webapps/ROOT.war" \
-        --clean false
+    appName: $(appName)
+    package: '$(Build.ArtifactStagingDirectory)/ROOT.war'
+
+# Azure CLI deployment (no clean)
+# - task: AzureCLI@2
+#   inputs:
+#     azureSubscription: $(azureSubscription)
+#     scriptType: 'bash'
+#     scriptLocation: 'inlineScript'
+#     inlineScript: |
+#       echo "Deploying WAR without cleaning existing files..."
+#       az webapp deploy \
+#         --resource-group java-webapp_group \
+#         --name $(appName) \
+#         --src-path "$(Build.ArtifactStagingDirectory)/ROOT.war" \
+#         --type war \
+#         --target-path "webapps/ROOT.war" \
+#         --clean false
