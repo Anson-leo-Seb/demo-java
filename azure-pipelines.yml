@@ -53,5 +53,5 @@ steps:
         --name $(appName) \
         --src-path "$(Build.ArtifactStagingDirectory)/ROOT.war" \
         --type war \
-        --target-path "**/webapps/"
+        --target-path "webapps/ROOT.war"
         --clean false
