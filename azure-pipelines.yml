@@ -49,7 +49,7 @@ steps:
     inlineScript: |
       echo "Deploying WAR without cleaning existing files..."
       az webapp deploy \
-        --resource-group <YourResourceGroupName> \
+        --resource-group java-webapp_group \
         --name $(appName) \
         --src-path "$(Build.ArtifactStagingDirectory)/ROOT.war" \
         --type war \
